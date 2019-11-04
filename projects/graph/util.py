@@ -8,6 +8,8 @@ class Queue():
             return self.queue.pop(0)
         else:
             return None
+    def is_empty(self):
+        return self.queue == []
     def size(self):
         return len(self.queue)
 
@@ -21,6 +23,8 @@ class Stack():
             return self.stack.pop()
         else:
             return None
+    def is_empty(self):
+        return self.stack == []
     def size(self):
         return len(self.stack)
 
