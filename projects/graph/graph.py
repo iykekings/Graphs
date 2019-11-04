@@ -92,13 +92,23 @@ class Graph:
         return visited
 
 
-    def bfs(self, starting_vertex, destination_vertex):
+    def bfs(self, starting_vertex, destination_vertex, path=[]):
         """
         Return a list containing the shortest path from
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        path = path + [starting_vertex]
+        if starting_vertex == destination_vertex:
+            return path
+        if starting_vertex not in self.vertices.keys():
+            return None
+        for node in self.vertices[starting_vertex]:
+            if node not in path:
+                newpath = self.bfs(node, destination_vertex, path)
+                if newpath: return newpath
+        return None
+        
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
@@ -171,13 +181,13 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
-    graph.dft_recursive(1)
+    # graph.dft_recursive(1)
 
     '''
     Valid BFS path:
         [1, 2, 4, 6]
     '''
-    # print(graph.bfs(1, 6))
+    print(graph.bfs(1, 6))
 
     '''
     Valid DFS paths:
