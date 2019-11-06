@@ -1,3 +1,5 @@
+from random import randint
+
 class Queue:
     def __init__(self):
         self.store = []
@@ -13,8 +15,6 @@ class Queue:
             return self.store.pop(0)
         return None
 
-# from projects.ancestor.ancestor import Queue
-from random import randint
 class User:
     def __init__(self, name):
         self.name = name
@@ -89,22 +89,29 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
         # The best traversal method is breath-first traversal, since we'd be recording the shortest path
         # create an empty queue and enqueue the starting vertex ID
+        depth = 1
         q = Queue()
-        q.enqueue(starting_vertex)
-        # create a set to store the visited vertices
-        visited = set()
+        q.enqueue(self.friendships[userID])
         # while the queue is not empty
         while q.size() > 0:
             # Dequeue the first vertex
-            v = q.dequeue()
-            # if that vertex has not been visited
-            if v not in visited:
-                # mark it as visited (printing for a representation)
-                print(v)
-                visited.add(v)
-                # then add all of it's neighbours to the back of the queue
-                for next_vertex in self.vertices[v]:
-                    q.enqueue(next_vertex)
+            level = q.dequeue()
+            # create a list to hold all next friends
+            new_friends = set()
+            for val in level:
+                # if that vertex has not been visited and also not the userID
+                if val not in visited and val != userID:
+                    # then mark it as visited, set the shortest path as the value
+                    visited[val] = depth
+                    # then add all of it's neighbours to the new_friend set
+                    new_friends = new_friends.union(self.friendships[val])
+            # Don't enqueue and empty set
+            if (new_friends):
+                q.enqueue(new_friends)
+            # reset new_friends
+            new_friends = set()
+            # increment depth
+            depth += 1
         return visited
 
 
@@ -112,14 +119,41 @@ if __name__ == '__main__':
     sg = SocialGraph()
     sg.populateGraph(10, 2)
     print(sg.friendships)
-    # connections = sg.getAllSocialPaths(1)
-    # print(connections)
+    connections = sg.getAllSocialPaths(1)
+    print(connections)
 
-# {1: {9, 2}, 2: {8, 1, 10}, 3: {6}, 4: {6}, 5: {10}, 6: {3, 4}, 7: {10}, 8: {2}, 9: {1}, 10: {2, 5, 7}}
+# Example Result
 
+# {1: {4, 6, 7}, 2: {4}, 3: {9, 10}, 4: {1, 2}, 5: {10}, 6: {1}, 7: {1}, 8: set(), 9: {3}, 10: {3, 5}}
+
+# {4: 1, 6: 1, 7: 1, 2: 2}
 
 """
-    1
-   / \
-  2   9
+   7   6
+    \ /
+     1
+      \
+       4
+        \
+         2
+    This is correct when compared with the friendships dict
+"""
+
+# More Connected Example 
+
+# friendships: {1: {2, 5}, 2: {1}, 3: {9}, 4: {10}, 5: {8, 1, 9}, 6: {8, 7}, 7: {6}, 8: {9, 5, 6}, 9: {8, 10, 3, 5}, 10: {9, 4}}
+
+# social path: {2: 1, 5: 1, 8: 2, 9: 2, 3: 3, 6: 3, 10: 3, 4: 4, 7: 4}
+
+"""
+       2
+        \
+         1
+          \
+       6   5    10
+      / \ /  \ /  \
+     7   8 -- 9    4
+               \
+                3
+    This is correct when compared with the friendships dict
 """
