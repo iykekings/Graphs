@@ -8,8 +8,7 @@ class Queue:
     def dequeue(self):
         if self.size() > 0:
             return self.storage.pop(0)
-        else:
-            return None
+        return None
 
     def size(self):
         return len(self.storage)

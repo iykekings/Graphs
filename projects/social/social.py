@@ -1,4 +1,19 @@
+class Queue:
+    def __init__(self):
+        self.store = []
 
+    def size(self):
+        return len(self.store)
+
+    def enqueue(self, value):
+        self.store.append(value)
+    
+    def dequeue(self):
+        if self.size() > 0:
+            return self.store.pop(0)
+        return None
+
+# from projects.ancestor.ancestor import Queue
 from random import randint
 class User:
     def __init__(self, name):
@@ -50,10 +65,11 @@ class SocialGraph:
             self.addUser(f"User {i}")
 
         # create friendships
+
         # loop through user_id of friends
         for user_id in self.users:
             #  loop through a random range btw 1 and avgFriendship
-            for i in range(randint(1, avgFriendships)):
+            for i in range(randint(1, avgFriendships - 1)):
                 # get a random user_id
                 rand_user_id = randint(1, self.lastID)
                 if(rand_user_id != user_id):
@@ -71,6 +87,24 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        # The best traversal method is breath-first traversal, since we'd be recording the shortest path
+        # create an empty queue and enqueue the starting vertex ID
+        q = Queue()
+        q.enqueue(starting_vertex)
+        # create a set to store the visited vertices
+        visited = set()
+        # while the queue is not empty
+        while q.size() > 0:
+            # Dequeue the first vertex
+            v = q.dequeue()
+            # if that vertex has not been visited
+            if v not in visited:
+                # mark it as visited (printing for a representation)
+                print(v)
+                visited.add(v)
+                # then add all of it's neighbours to the back of the queue
+                for next_vertex in self.vertices[v]:
+                    q.enqueue(next_vertex)
         return visited
 
 
@@ -80,3 +114,12 @@ if __name__ == '__main__':
     print(sg.friendships)
     # connections = sg.getAllSocialPaths(1)
     # print(connections)
+
+# {1: {9, 2}, 2: {8, 1, 10}, 3: {6}, 4: {6}, 5: {10}, 6: {3, 4}, 7: {10}, 8: {2}, 9: {1}, 10: {2, 5, 7}}
+
+
+"""
+    1
+   / \
+  2   9
+"""
