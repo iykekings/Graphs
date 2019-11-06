@@ -1,5 +1,5 @@
 
-
+from random import randint
 class User:
     def __init__(self, name):
         self.name = name
@@ -44,33 +44,21 @@ class SocialGraph:
         self.lastID = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
 
         # Add users
-        # create friendships
+        for i in range(numUsers):
+            self.addUser(f"User {i}")
 
-        # Generate all friendship combinations
-        # make a list of possible friendships
-        possibleFreindships = []
-        # avoid duplicates ensuring that the first number is smaller than the second
-        
-        # loop over userID in users
-        for userID in self.users:
-            # loop over friend id in a range from user id + 1 to the lastID +1
-            for friendID in range(userID + 1, self.lastID + 1):
-                # append the tuple of (user id , friend id) to the possible friendships list
-                possibleFreindships.append((userID, friendID))
-        # shuffle the possible friendships using the random.suffle method
-        random.shuffle(possibleFreindships)
-        # create afriendships of the first x ammount of pairs in the list   
-        # X determined by the formula: numusers * avgFriendships // 2
-        # we need to divide by to as each createFriendship adds 2 friendships
-        # loop over a range to numUsers * avgFriendships // 2
-        for i in range(numUsers * avgFriendships // 2):
-            # set the friendship to possible friends at i
-            friendship = possibleFreindships[i]
-            # addfriendship of friendship[0] and friendship[1]
-            self.addFriendship(friendship[0], friendship[1])
+        # create friendships
+        # loop through user_id of friends
+        for user_id in self.users:
+            #  loop through a random range btw 1 and avgFriendship
+            for i in range(randint(1, avgFriendships)):
+                # get a random user_id
+                rand_user_id = randint(1, self.lastID)
+                if(rand_user_id != user_id):
+                    self.addFriendship(user_id, rand_user_id)
+       
 
     def getAllSocialPaths(self, userID):
         """
@@ -90,5 +78,5 @@ if __name__ == '__main__':
     sg = SocialGraph()
     sg.populateGraph(10, 2)
     print(sg.friendships)
-    connections = sg.getAllSocialPaths(1)
-    print(connections)
+    # connections = sg.getAllSocialPaths(1)
+    # print(connections)
