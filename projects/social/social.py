@@ -1,4 +1,5 @@
 from random import randint
+from typing import List, Union
 
 class Queue:
     def __init__(self):
@@ -10,7 +11,7 @@ class Queue:
     def enqueue(self, value):
         self.store.append(value)
 
-    def dequeue(self):
+    def dequeue(self) -> List:
         if self.size() > 0:
             return self.store.pop(0)
         return None
@@ -127,29 +128,27 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
         # The best traversal method is breath-first traversal, since we'd be recording the shortest path
         # create an empty queue and enqueue the starting vertex ID
-        depth = 1
         q = Queue()
-        q.enqueue(self.friendships[userID])
+        q.enqueue([userID])
         # while the queue is not empty
         while q.size() > 0:
             # Dequeue the first vertex
-            level = q.dequeue()
-            # create a list to hold all next friends
-            new_friends = set()
-            for val in level:
-                # if that vertex has not been visited and also not the userID
-                if val not in visited and val != userID:
-                    # then mark it as visited, set the shortest path as the value
-                    visited[val] = depth
-                    # then add all of it's neighbours to the new_friend set
-                    new_friends = new_friends.union(self.friendships[val])
-            # Don't enqueue and empty set
-            if (new_friends):
-                q.enqueue(new_friends)
-            # reset new_friends
-            new_friends = set()
-            # increment depth
-            depth += 1
+            path = q.dequeue()
+            new_user_id = path[-1]
+
+            # check if new_user_id exits in visted dict
+            if new_user_id not in visited:
+                visited[new_user_id] = path
+
+                for friendID in self.friendships[new_user_id]:
+                    # check if friendID is already in visited
+                    if friendID not in visited:
+                        # cope path
+                        new_path = list(path)
+                        # append friendID
+                        new_path.append(friendID)
+                        # enqueue new_path
+                        q.enqueue(new_path)            
         return visited
 
 
@@ -160,7 +159,7 @@ if __name__ == '__main__':
     connections = sg.getAllSocialPaths(1)
     print(connections)
 
-# Example Result
+# Example Result for sg.getAllSocialDepth
 
 # {1: {4, 6, 7}, 2: {4}, 3: {9, 10}, 4: {1, 2}, 5: {10}, 6: {1}, 7: {1}, 8: set(), 9: {3}, 10: {3, 5}}
 
@@ -177,7 +176,7 @@ if __name__ == '__main__':
     This is correct when compared with the friendships dict
 """
 
-# More Connected Example
+# More Connected Example for g.getAllSocialDepth
 
 # friendships: {1: {2, 5}, 2: {1}, 3: {9}, 4: {10}, 5: {8, 1, 9}, 6: {8, 7}, 7: {6}, 8: {9, 5, 6}, 9: {8, 10, 3, 5}, 10: {9, 4}}
 
