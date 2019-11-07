@@ -67,7 +67,7 @@ class SocialGraph:
             self.addUser(f"User {i}")
 
         # create friendships
-
+        counter = 0
         # loop through user_id of friends
         for user_id in self.users:
             #  loop through a random range btw 1 and avgFriendship
@@ -76,6 +76,13 @@ class SocialGraph:
                 rand_user_id = randint(1, self.lastID)
                 if(rand_user_id != user_id):
                     self.addFriendship(user_id, rand_user_id)
+                    counter += 1
+        print(f"Called Addfriend {counter} times")
+        # Get average friendship per user
+        totalfriendships = 0
+        for user in self.friendships:
+            totalfriendships += len(self.friendships[user])
+        print(f"Average number of friendships is {totalfriendships/len(self.users)}")
 
 
     def getAllSocialDepth(self, userID):
