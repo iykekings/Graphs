@@ -9,7 +9,7 @@ class Queue:
 
     def enqueue(self, value):
         self.store.append(value)
-    
+
     def dequeue(self):
         if self.size() > 0:
             return self.store.pop(0)
@@ -74,7 +74,45 @@ class SocialGraph:
                 rand_user_id = randint(1, self.lastID)
                 if(rand_user_id != user_id):
                     self.addFriendship(user_id, rand_user_id)
-       
+
+
+    def getAllSocialDepth(self, userID):
+        """
+        Takes a user's userID as an argument
+
+        Returns a dictionary containing every user in that user's
+        extended network with the shortest friendship path between them.
+
+        The key is the friend's ID and the value is the path.
+        """
+        visited = {}  # Note that this is a dictionary, not a set
+        # !!!! IMPLEMENT ME
+        # The best traversal method is breath-first traversal, since we'd be recording the shortest path
+        # create an empty queue and enqueue the starting vertex ID
+        depth = 1
+        q = Queue()
+        q.enqueue(self.friendships[userID])
+        # while the queue is not empty
+        while q.size() > 0:
+            # Dequeue the first vertex
+            level = q.dequeue()
+            # create a list to hold all next friends
+            new_friends = set()
+            for val in level:
+                # if that vertex has not been visited and also not the userID
+                if val not in visited and val != userID:
+                    # then mark it as visited, set the shortest path as the value
+                    visited[val] = depth
+                    # then add all of it's neighbours to the new_friend set
+                    new_friends = new_friends.union(self.friendships[val])
+            # Don't enqueue and empty set
+            if (new_friends):
+                q.enqueue(new_friends)
+            # reset new_friends
+            new_friends = set()
+            # increment depth
+            depth += 1
+        return visited
 
     def getAllSocialPaths(self, userID):
         """
@@ -139,7 +177,7 @@ if __name__ == '__main__':
     This is correct when compared with the friendships dict
 """
 
-# More Connected Example 
+# More Connected Example
 
 # friendships: {1: {2, 5}, 2: {1}, 3: {9}, 4: {10}, 5: {8, 1, 9}, 6: {8, 7}, 7: {6}, 8: {9, 5, 6}, 9: {8, 10, 3, 5}, 10: {9, 4}}
 
