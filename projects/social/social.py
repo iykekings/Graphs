@@ -1,5 +1,6 @@
 from random import randint
-from typing import List, Union
+from typing import List
+from time import time
 
 class Queue:
     def __init__(self):
@@ -154,10 +155,13 @@ class SocialGraph:
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populateGraph(10, 2)
-    print(sg.friendships)
+    start = time()
+    sg.populateGraph(1000, 5)
     connections = sg.getAllSocialPaths(1)
-    print(connections)
+    end = time()
+    print(f"Total time = {end - start}")
+    # print(sg.friendships)
+    # print(connections)
 
 # Example Result for sg.getAllSocialDepth
 
