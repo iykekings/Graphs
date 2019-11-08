@@ -121,11 +121,6 @@ def bfs(graph, starting_room):
     # Don't need to return anything because I am setting the results of this to a variable
     return None
 
-    # TRICKY PARTS
-        # 2. When you get a path, it gives you a list of the rooms (102, 107, 105) - that is not what you need to traverse. that is the order of rooms. but we need code to change the list of rooms to a list of directions. return path of rooms (list of numbers). then write another code, that looks at room graph and converts room numbers into directions. almost always easier to break up into parts instead of mixing. walk along list of directions and append to original path.
-        # 3. Loops - when you get into a loop, you might run into some bugs. Test it on the second to last sample graph, it has a loop in it.
-        # if direction == n, return s
-        # left is a key, north is a value
     
 # While graph is smaller than 500
 while len(graph) < len(roomGraph):
