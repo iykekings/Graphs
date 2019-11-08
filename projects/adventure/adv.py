@@ -4,6 +4,37 @@ from world import World
 
 import random
 
+# Useful Data Structures
+
+class Queue:
+    def __init__(self):
+        self.storage = []
+
+    def dequeue(self):
+        if self.size() > 0:
+            return self.storage.pop(0)
+        return None
+
+    def enqueue(self, value):
+        self.storage.append(value)
+
+    def size(self):
+        return len(self.storage)
+class Stack:
+    def __init__(self):
+        self.storage = []
+
+    def pop(self):
+        if self.size() > 0:
+            return self.storage.pop()
+        return None
+
+    def append(self, value):
+        self.storage.append(value)
+
+    def size(self):
+        return len(self.storage)
+
 # Load world
 world = World()
 
@@ -22,7 +53,7 @@ world.printRooms()
 player = Player("Name", world.startingRoom)
 
 # Fill this out
-traversalPath = ['n','n']
+traversalPath = []
 
 
 
